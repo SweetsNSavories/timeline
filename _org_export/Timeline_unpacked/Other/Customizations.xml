@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26022.140" OrganizationSchemaType="Full" CRMServerServiceabilityVersion="9.2.26023.00144">
+  <Entities />
+  <Roles />
+  <Workflows />
+  <FieldSecurityProfiles />
+  <Templates />
+  <EntityMaps />
+  <EntityRelationships />
+  <OrganizationSettings />
+  <optionsets />
+  <InteractionCentricDashboards />
+  <WebResources />
+  <CustomControls />
+  <EntityDataProviders />
+  <EntityDataSources />
+  <connectionreferences>
+    <connectionreference connectionreferencelogicalname="crbff_sharedsharepointonl25fc562851564c9a8906b8b45e6f0647">
+      <connectionreferencedisplayname>Connection Reference - shared-sharepointonl-25fc5628-5156-4c9a-8906-b8b45e6f0647</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_sharepointonline</connectorid>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+  </connectionreferences>
+  <Languages>
+    <Language>1033</Language>
+  </Languages>
+</ImportExportXml>

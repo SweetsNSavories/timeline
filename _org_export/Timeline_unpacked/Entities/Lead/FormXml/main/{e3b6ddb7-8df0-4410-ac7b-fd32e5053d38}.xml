@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}</formid>
+    <IntroducedVersion>5.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form showImage="true" shownavigationbar="true" maxWidth="1920" headerdensity="HighWithControls" solutionaction="Modified">
+      <tabs>
+        <tab name="Summary" verticallayout="true" id="{f7109214-c3bd-4734-ad5b-4054499a43d6}" IsUserDefined="0" locklevel="0" expanded="true" showlabel="true" ordinalvalue="0">
+          <columns>
+            <column width="33%" id="0">
+              <sections>
+                <section name="SUMMARY_TAB_ADDRESSINPUT_SECTION" id="4901e6b4-add1-4504-8985-bebe34c7a93c" IsUserDefined="0" locklevel="0" visible="false" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115" ordinalvalue="2">
+                  <rows>
+                    <row>
+                      <cell id="{d75860a2-3d5d-4909-a310-c8a1f2a33f4b}" showlabel="false" locklevel="0" colspan="1" rowspan="1" ordinalvalue="10000">
+                        <labels>
+                          <label description="Street 1" languagecode="1033" solutionaction="Modified" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="42%" id="1">
+              <sections>
+                <section name="SOCIAL_PANE" showlabel="false" showbar="false" locklevel="0" id="{bac826a8-ee3e-412a-828a-f192e6d8dc6e}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Top" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell colspan="1" showlabel="false" rowspan="18" id="{fd6855b3-9d55-489e-9322-70b510b2987d}" locklevel="0" auto="false" ordinalvalue="10000">
+                        <control id="notescontrol" classid="{06375649-C143-495E-A496-C962E5B4488E}" disabled="false">
+                          <parameters solutionaction="Added">
+                            <UClientRecordSourcesJSON>{"recordSources":[{"name":"crbff_ShipmentTimelineConnector","constructor":"SampleNamespace.ShipmentRecordSource","configurationPath":""}]}</UClientRecordSourcesJSON>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <controlDescriptions>
+        <controlDescription forControl="{e5ade895-e7a3-6d31-d320-a46a084011d9}" solutionaction="Removed" />
+        <controlDescription forControl="{ec27ead4-0e38-18dd-86b7-ad1de590745b}" solutionaction="Removed" />
+        <controlDescription forControl="{957b3ec0-72a0-1b92-d528-e6e5ed211571}" solutionaction="Removed" />
+        <controlDescription forControl="{DA8CA1CC-D87E-4ABC-8063-406CFBED93A5}" solutionaction="Modified">
+          <customControl formFactor="0" name="Consent.ContactabilityGridControl.ContactabilityGridControl">
+            <parameters />
+          </customControl>
+          <customControl formFactor="1" name="Consent.ContactabilityGridControl.ContactabilityGridControl">
+            <parameters />
+          </customControl>
+          <customControl formFactor="2" name="Consent.ContactabilityGridControl.ContactabilityGridControl">
+            <parameters />
+          </customControl>
+        </controlDescription>
+      </controlDescriptions>
+      <footer id="{4e313fef-f148-4f76-8722-5f5322edf05c}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left" solutionaction="Added">
+        <rows>
+          <row>
+            <cell id="{b61884ce-7bef-44d5-b909-2ea494b9fb95}" showlabel="false" ordinalvalue="10000">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{ad207c4c-e219-42ff-aa87-2caaed7cc6d0}" showlabel="false" ordinalvalue="20001">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{a778f3b2-29ce-4937-acaf-75e137446045}" showlabel="false" ordinalvalue="30002">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+    </form>
+    <LocalizedNames>
+      <LocalizedName description="Lead" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Updated default Lead form" languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

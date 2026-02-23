@@ -1,0 +1,209 @@
+// ===================================================================
+// GENERIC TIMELINE RECORD SOURCE - Configurable for Any Virtual Entity
+// ===================================================================
+// Usage: Create a new class that extends this base, customize config
+// ===================================================================
+
+var SampleNamespace = SampleNamespace || {};
+
+SampleNamespace.GenericTimelineRecordSource = class {
+  constructor(config) {
+    // ===== CONFIGURATION - Customize these for your entity =====
+    this.config = {
+      moduleName: config?.moduleName || "CustomConnector",
+      entityLogicalName: config?.entityLogicalName || "crbff_shipments",
+      primaryKeyField: config?.primaryKeyField || "crbff_shipmentsid",
+      dateField: config?.dateField || "createdon",
+      selectFields: config?.selectFields || ["crbff_title", "crbff_field1", "crbff_field2", "crbff_field3", "crbff_field4", "crbff_externalprimarykey"],
+      filterField: config?.filterField || "crbff_field1", // Field used for dropdown filtering
+      filterOptions: config?.filterOptions || [
+        { value: "Shipped", label: "Shipped" },
+        { value: "Delivered", label: "Delivered" }
+      ],
+      headerField: config?.headerField || "crbff_title", // Field to display in header
+      bodyFormat: config?.bodyFormat || (data) => `Status: ${data.crbff_field1} | To: ${data.crbff_field3}`, // Custom body formatter
+      footerFormat: config?.footerFormat || (data) => `Tracking: ${data.crbff_field4}`, // Custom footer formatter
+      searchFields: config?.searchFields || ["crbff_title", "crbff_field1", "crbff_field3", "crbff_field4"] // Fields to search
+    };
+    
+    this._recordsCache = null;
+  }
+  
+  init(ctx) { 
+    this._context = ctx; 
+    return Promise.resolve(); 
+  }
+  
+  getRecordSourceInfo() {
+    return { name: this.config.moduleName };
+  }
+  
+  async getRecordsData(req, filter) {
+    try {
+      console.log(`[${this.config.moduleName}] getRecordsData called`);
+      
+      // Fetch all records once and cache locally
+      if (!this._recordsCache) {
+        console.log(`[${this.config.moduleName}] Cache miss - fetching all ${this.config.entityLogicalName} records...`);
+        this._recordsCache = await this._fetchAllRecords();
+        console.log(`[${this.config.moduleName}] Cached ${this._recordsCache.length} records`);
+      } else {
+        console.log(`[${this.config.moduleName}] Cache hit - reusing ${this._recordsCache.length} records`);
+      }
+      
+      let recordsData = [...this._recordsCache];
+      
+      // Apply search locally
+      if (filter && filter.searchKey) {
+        console.log(`[${this.config.moduleName}] Applying search for: ${filter.searchKey}`);
+        recordsData = this._applySearch(recordsData, filter.searchKey);
+        console.log(`[${this.config.moduleName}] After search: ${recordsData.length} records`);
+      }
+      
+      // Apply filters locally
+      if (filter && filter.filterData && filter.filterData.length > 0) {
+        console.log(`[${this.config.moduleName}] Applying filter`);
+        recordsData = this._applyFilters(recordsData, filter.filterData);
+        console.log(`[${this.config.moduleName}] After filter: ${recordsData.length} records`);
+      }
+      
+      // Sort locally
+      this._sortRecords(recordsData, req.isAscending);
+      
+      // Handle pagination
+      let paginated = this._getPaginatedRecords(recordsData, req);
+      
+      console.log(`[${this.config.moduleName}] Returning ${paginated.length} of ${recordsData.length} records`);
+      return { requestId: req.requestId, records: paginated, hasMoreRecords: paginated.length < recordsData.length };
+    } catch (e) { 
+      console.error(`[${this.config.moduleName}] Error:`, e); 
+      return { requestId: req.requestId, records: [] }; 
+    }
+  }
+  
+  async _fetchAllRecords() {
+    let q = `?$select=${this.config.selectFields.join(",")}`;
+    
+    // OPTIONAL: Filter by related record (e.g., current Lead)
+    // Uncomment and customize for your entity:
+    // let currentRecordId = this._context.parameters?.tableContext?.id;
+    // if (currentRecordId) {
+    //   q += `&$filter=_relationshipfield_value eq ${currentRecordId}`;
+    // }
+    
+    let res = await this._context.webAPI.retrieveMultipleRecords(this.config.entityLogicalName, q);
+    return (res.entities || []).map(i => ({ 
+      id: i[this.config.primaryKeyField], 
+      sortDateValue: i[this.config.dateField] || new Date().toISOString(), 
+      data: JSON.stringify(i) 
+    }));
+  }
+  
+  _applySearch(records, keyword) {
+    let searchTerm = keyword.toLowerCase();
+    return records.filter(rec => {
+      let data = JSON.parse(rec.data);
+      let searchable = this.config.searchFields
+        .map(field => data[field] || '')
+        .join(' ')
+        .toLowerCase();
+      return searchable.includes(searchTerm);
+    });
+  }
+  
+  _applyFilters(records, filterData) {
+    let selectedValues = [];
+    filterData.forEach(g => {
+      g.options.forEach(o => {
+        if (o.isSelected) selectedValues.push(o.value);
+      });
+    });
+    
+    if (selectedValues.length === 0) return records;
+    
+    return records.filter(rec => {
+      let data = JSON.parse(rec.data);
+      return selectedValues.includes(data[this.config.filterField]);
+    });
+  }
+  
+  _sortRecords(records, isAscending) {
+    records.sort((a, b) => {
+      let dateA = new Date(a.sortDateValue).getTime();
+      let dateB = new Date(b.sortDateValue).getTime();
+      return isAscending ? dateA - dateB : dateB - dateA;
+    });
+  }
+  
+  _getPaginatedRecords(records, req) {
+    let start = 0;
+    if (req.lastItem) {
+      let lastIndex = records.findIndex(r => r.id === req.lastItem.id);
+      if (lastIndex !== -1) start = lastIndex + 1;
+    }
+    return records.slice(start, start + (req.pageSize || 10));
+  }
+  
+  getFilterDetails() { 
+    return Promise.resolve([
+      { 
+        name: "PrimaryFilter", 
+        label: this.config.filterField, 
+        type: "MultiSelect", 
+        isExpanded: true, 
+        options: this.config.filterOptions
+      }
+    ]); 
+  }
+  
+  getRecordUX(data) {
+    let item = JSON.parse(data.data);
+    let factory = this._context.factory;
+    
+    return { 
+      id: data.id, 
+      moduleName: this.config.moduleName, 
+      sortDateValue: data.sortDateValue,
+      searchText: this.config.searchFields.map(f => item[f] || '').join(' '),
+      header: { 
+        components: [
+          factory.createElement("Label", { key: "h", style: { fontWeight: "bold" } }, item[this.config.headerField] || "No Title")
+        ] 
+      },
+      body: { 
+        components: [
+          factory.createElement("Label", { key: "b" }, this.config.bodyFormat(item))
+        ] 
+      },
+      footer: { 
+        components: [
+          factory.createElement("Label", { key: "f" }, this.config.footerFormat(item))
+        ] 
+      } 
+    };
+  }
+};
+
+// ===================================================================
+// SHIPMENT IMPLEMENTATION - Using Generic Base Class
+// ===================================================================
+SampleNamespace.ShipmentRecordSource = class extends SampleNamespace.GenericTimelineRecordSource {
+  constructor() {
+    super({
+      moduleName: "ShipmentConnector",
+      entityLogicalName: "crbff_shipments",
+      primaryKeyField: "crbff_shipmentsid",
+      dateField: "createdon",
+      selectFields: ["crbff_title", "crbff_field1", "crbff_field2", "crbff_field3", "crbff_field4", "crbff_externalprimarykey"],
+      filterField: "crbff_field1",
+      filterOptions: [
+        { value: "Shipped", label: "Shipped" },
+        { value: "Delivered", label: "Delivered" }
+      ],
+      headerField: "crbff_title",
+      bodyFormat: (data) => `Status: ${data.crbff_field1} | To: ${data.crbff_field3}`,
+      footerFormat: (data) => `Tracking: ${data.crbff_field4}`,
+      searchFields: ["crbff_title", "crbff_field1", "crbff_field3", "crbff_field4"]
+    });
+  }
+};

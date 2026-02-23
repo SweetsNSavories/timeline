@@ -1,0 +1,679 @@
+/*
+    This file is part of the Microsoft PowerApps code samples.
+    Copyright (C) Microsoft Corporation.  All rights reserved.
+    This source code is intended only as a supplement to Microsoft Development Tools and/or
+    on-line documentation.  See these other materials for detailed information regarding
+    Microsoft code samples.
+
+    THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+    EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
+ */
+    var SampleNamespace;
+    (function (SampleNamespace) {
+        class SecondaryRecordSource {
+            init(context) {
+                this.context = context;
+                this.svgIconSrcPath = Xrm.Utility.getGlobalContext().getWebResourceUrl("msdyn_cec_Available.svg");
+                return Promise.resolve();
+            }
+            getRecordSourceInfo() {
+                return { name: "SecondaryDataSource" };
+            }
+            getRecordsData(request, filter) {
+                let recordsData = SampleNamespace.SampleData.sampleRecordsData;
+                let filtersData;
+                if ((filter === null || filter === void 0 ? void 0 : filter.filterData) && filter.filterData.length > 0) {
+                    recordsData = SampleNamespace.FilterHelper.getRecordsFromSecondaryFilterApplied(recordsData, filter.filterData);
+                }
+                this.orderRecordsData(recordsData, request.isAscending);
+                let recordsAfterLastItem = [];
+                if (request.lastItem) {
+                    recordsAfterLastItem = this.getRecordsAfterLastItem(recordsData, request.lastItem);
+                }
+                else {
+                    recordsAfterLastItem = recordsData;
+                }
+                let recordsDataCounted;
+                if (request.pageSize > recordsAfterLastItem.length) {
+                    recordsDataCounted = recordsAfterLastItem;
+                }
+                else {
+                    recordsDataCounted = recordsAfterLastItem.slice(0, request.pageSize);
+                }
+                const recordResponse = {
+                    requestId: request.requestId,
+                    records: recordsDataCounted,
+                    filtersData: filtersData,
+                };
+                return Promise.resolve(recordResponse);
+            }
+            getFilterDetails(filter) {
+                let filtersData = SampleNamespace.SampleData.sampleFilterData;
+                let recordsData = SampleNamespace.SampleData.sampleRecordsData;
+                if ((filter === null || filter === void 0 ? void 0 : filter.filterData) && filter.filterData.length > 0) {
+                    filtersData = SampleNamespace.FilterHelper.getFilterDetailsFilterApplied(filtersData, filter.filterData);
+                    recordsData = SampleNamespace.FilterHelper.getRecordsFromSecondaryFilterApplied(recordsData, filter.filterData);
+                }
+                // add modifieddate group data to filterDetails
+                let modifiedDateGroup = SampleNamespace.FilterHelper.getModifiedDateFilterDetails(recordsData);
+                if (modifiedDateGroup.options && modifiedDateGroup.options.length > 0) {
+                    filtersData.push(modifiedDateGroup);
+                }
+                return Promise.resolve(filtersData);
+            }
+            getRecordUX(recordData, recordState) {
+                const record = this.buildRecordUX(recordData.sortDateValue, recordData.id, recordState.isExpanded);
+                return record;
+            }
+            getRecordCreate() {
+                const record1 = {
+                    id: "001",
+                    iconType: 205,
+                    label: "Sample Data 001",
+                    onClick: this.onClickCreateRecord.bind(this, "task", true)
+                };
+                const record2 = {
+                    id: "002",
+                    iconType: 203,
+                    label: "Sample Data 002",
+                    onClick: (e) => {
+                        console.log("test test");
+                        Xrm.Page.getControl("Timeline").refresh();
+                        return Promise.resolve();
+                    }
+                };
+                return [record1, record2];
+            }
+            onClickCreateRecord(entityName, isQuickCreateForm) {
+                const options = { entityName: entityName, useQuickCreateForm: isQuickCreateForm };
+                return this.context.navigation.openForm(options).then(() => {
+                    const successResponse = {
+                        success: true,
+                        needRefresh: true
+                    };
+                    return successResponse;
+                }, (e) => {
+                    const errorResponse = {
+                        success: false,
+                        errorMessage: "test error message"
+                    };
+                    return errorResponse;
+                });
+            }
+            getRecordsAfterLastItem(recordsData, lastItem) {
+                const lastItemIndex = recordsData.findIndex((item) => item.id == lastItem.id);
+                return recordsData.slice(lastItemIndex + 1);
+            }
+            buildRecordUX(sortDateValue, recordId, isExpanded) {
+                const commandComponents = this.createCommands();
+                const headerComponents = [this.createHeaderComponent(recordId, isExpanded)];
+                const bodyComponents = [this.createBodyComponent(recordId, isExpanded)];
+                const footerComponents = [this.createFooterComponent(recordId, sortDateValue)];
+                const icon = this.createIcon();
+                // example of use custom icon component
+                const bubbleIcon = recordId.includes("D365") && this.createIconComponent(recordId);
+                const headerIcon = recordId.includes("D365") && this.createIconComponent(recordId);
+                const moduleName = this.getModuleName();
+                const timelineRecord = {
+                    id: recordId,
+                    commands: commandComponents,
+                    moduleName: moduleName,
+                    header: { components: headerComponents },
+                    body: { components: bodyComponents },
+                    footer: { components: footerComponents },
+                    accessibleName: "SecondaryDataSource Record: " + recordId,
+                    sortDateValue,
+                    icon,
+                    bubbleIcon,
+                    headerIcon,
+                };
+                return timelineRecord;
+            }
+            createCommands() {
+                return [
+                    {
+                        iconType: 203,
+                        label: "Command Label: Visit Microsoft Support",
+                        command: "VisitSMC",
+                        commandType: "HYPERLINK",
+                        href: "https://support.microsoft.com",
+                    },
+                ];
+            }
+            createIcon() {
+                return {
+                    type: 205,
+                    accessibleName: "SecondaryDataSource icon accessibleName",
+                };
+            }
+            createIconComponent(recordId) {
+                const imgProps = {
+                    id: recordId,
+                    source: this.svgIconSrcPath,
+                    style: {},
+                };
+                return this.context.factory.createElement("IMG", imgProps);
+            }
+            getModuleName() {
+                return "SecondaryDataSource";
+            }
+            createHeaderComponent(recordId, isExpanded) {
+                return this.context.factory.createElement("Label", {
+                    key: "SecondaryDataSource_" + recordId + "_header",
+                }, "Header Field: " + recordId + (isExpanded ? " Expanded" : " Collapsed"));
+            }
+            createBodyComponent(recordId, isExpanded) {
+                return this.context.factory.createElement("Label", {
+                    key: "SecondaryDataSource_" + recordId + "body",
+                }, "Body Field: " + recordId + (isExpanded ? " Expanded" : " Collapsed"));
+            }
+            createFooterComponent(recordId, sortDateValue) {
+                return this.context.factory.createElement("Label", {
+                    key: "SecondaryDataSource_" + recordId + "footer",
+                }, "Footer Field: " + recordId + ". Sort date value: " + sortDateValue);
+            }
+            // non-robust orderRecordsData
+            orderRecordsData(recordsData, isAscending) {
+                if (isAscending) {
+                    recordsData.sort((a, b) => {
+                        return a.sortDateValue && b.sortDateValue
+                            ? new Date(a.sortDateValue).getTime() - new Date(b.sortDateValue).getTime()
+                            : 0;
+                    });
+                }
+                else {
+                    recordsData.sort((a, b) => {
+                        return a.sortDateValue && b.sortDateValue
+                            ? new Date(b.sortDateValue).getTime() - new Date(a.sortDateValue).getTime()
+                            : 0;
+                    });
+                }
+            }
+        }
+        SampleNamespace.SecondaryRecordSource = SecondaryRecordSource;
+    })(SampleNamespace || (SampleNamespace = {}));
+    /*
+        This file is part of the Microsoft PowerApps code samples.
+        Copyright (C) Microsoft Corporation.  All rights reserved.
+        This source code is intended only as a supplement to Microsoft Development Tools and/or
+        on-line documentation.  See these other materials for detailed information regarding
+        Microsoft code samples.
+    
+        THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+        EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+        MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
+     */
+    var SampleNamespace;
+    (function (SampleNamespace) {
+        class FilterHelper {
+            static getFilterDetailsFilterApplied(allFiltersData, requestFilterData) {
+                let selectedFilterModules = [];
+                let filteredData = [];
+                let childModules = this.getChildModulesSelected(requestFilterData);
+                requestFilterData === null || requestFilterData === void 0 ? void 0 : requestFilterData.forEach((group) => {
+                    var _a;
+                    (_a = group.options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                        if (option.isSelected && !selectedFilterModules.some((x) => x === group.name)) {
+                            selectedFilterModules.push(group.name);
+                        }
+                    });
+                });
+                selectedFilterModules === null || selectedFilterModules === void 0 ? void 0 : selectedFilterModules.forEach((element) => {
+                    let matchedRecords = allFiltersData.filter((data) => {
+                        return data.name == element;
+                    });
+                    filteredData = filteredData.concat(matchedRecords);
+                });
+                // if parent module alone selected add child filter groups
+                if ((childModules === null || childModules === void 0 ? void 0 : childModules.length) > 0) {
+                    filteredData = filteredData.concat(this.updateChildModuleFilterData(childModules));
+                }
+                else {
+                    this.updateParentModuleFilterData(filteredData, selectedFilterModules, requestFilterData);
+                }
+                return filteredData;
+            }
+            static getRecordsFromSecondaryFilterApplied(recordsData, filterData) {
+                let filterKey = [];
+                let childModules = this.getChildModulesSelected(filterData);
+                filterData === null || filterData === void 0 ? void 0 : filterData.forEach((group) => {
+                    var _a;
+                    (_a = group.options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                        if (option.isSelected) {
+                            if (group.name == "Module") {
+                                // skip if its not in childModules (only module option selected)
+                                if (childModules.indexOf(option.value) > -1) {
+                                    filterKey.push(option.value);
+                                }
+                            }
+                            else {
+                                filterKey.push(option.value);
+                            }
+                        }
+                    });
+                });
+                let filteredRecords = [];
+                if (filterKey.length > 0) {
+                    filterKey.forEach((element) => {
+                        let matchedRecords;
+                        matchedRecords = recordsData.filter((data) => {
+                            return data.id.toLowerCase().indexOf(element.toLowerCase()) > -1;
+                        });
+                        filteredRecords = filteredRecords.concat(matchedRecords);
+                    });
+                }
+                return filteredRecords;
+            }
+            static getModifiedDateFilterDetails(recordsData) {
+                // Last7Days
+                const lastWeekDate = new Date();
+                lastWeekDate.setDate(lastWeekDate.getDate() - 7);
+                // Last30Days
+                const lastMonthDate = new Date();
+                lastMonthDate.setDate(lastMonthDate.getDate() - 30);
+                //Last24Hours
+                const lastDayDate = new Date();
+                lastDayDate.setDate(lastDayDate.getDate() - 1);
+                let last7daysCount = 0;
+                let last30daysCount = 0;
+                let last24HoursCount = 0;
+                recordsData.forEach((data) => {
+                    let currentRecordDate = new Date(data.sortDateValue);
+                    if (lastDayDate <= currentRecordDate) {
+                        last24HoursCount++;
+                        last7daysCount++;
+                        last30daysCount++;
+                    }
+                    else if (lastWeekDate <= currentRecordDate) {
+                        last7daysCount++;
+                        last30daysCount++;
+                    }
+                    else if (lastMonthDate <= currentRecordDate) {
+                        last30daysCount++;
+                    }
+                });
+                let modifiedDateFilterData = {
+                    name: "TLG" /* CustomConnector.FilterGroupName.ModifiedDate */,
+                    type: "MultiSelect" /* CustomConnector.FilterGroupType.MultiSelect */,
+                    options: [],
+                };
+                if (last24HoursCount > 0) {
+                    modifiedDateFilterData.options.push({
+                        value: "Last24Hours" /* CustomConnector.ModifiedDateGroupOption.Last24Hours */,
+                        count: last24HoursCount,
+                    });
+                }
+                if (last7daysCount > 0) {
+                    modifiedDateFilterData.options.push({
+                        value: "Last7Days" /* CustomConnector.ModifiedDateGroupOption.Last7Days */,
+                        count: last7daysCount,
+                    });
+                }
+                if (last30daysCount > 0) {
+                    modifiedDateFilterData.options.push({
+                        value: "Last30Days" /* CustomConnector.ModifiedDateGroupOption.Last30Days */,
+                        count: last30daysCount,
+                    });
+                }
+                return modifiedDateFilterData;
+            }
+            static getChildModulesSelected(requestFilterData) {
+                let childModules = [];
+                requestFilterData === null || requestFilterData === void 0 ? void 0 : requestFilterData.forEach((group) => {
+                    var _a;
+                    (_a = group.options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                        if (option.isSelected) {
+                            if (group.name == "Module") {
+                                childModules.push(option.value);
+                            }
+                            if (group.name.indexOf("Service") > -1) {
+                                childModules = childModules.filter((x) => x !== "Service");
+                            }
+                            if (group.name.indexOf("Sales") > -1) {
+                                childModules = childModules.filter((x) => x !== "Sales");
+                            }
+                            if (group.name.indexOf("ActivityType") > -1 || group.name.indexOf("ActivityStatus") > -1) {
+                                childModules = childModules.filter((x) => x !== "Activities");
+                            }
+                        }
+                    });
+                });
+                return childModules;
+            }
+            static updateParentModuleFilterData(filteredData, selectedFilterModules, requestFilterData) {
+                if (selectedFilterModules.indexOf("Module" /* CustomConnector.FilterGroupName.RecordType */) == -1) {
+                    filteredData.push(SampleNamespace.SampleData.sampleFilterData[0]);
+                }
+                // adjust module counts
+                requestFilterData === null || requestFilterData === void 0 ? void 0 : requestFilterData.forEach((group) => {
+                    var _a;
+                    let isFirstIteration = true;
+                    if (group.name.indexOf("Service") > -1 || group.name.indexOf("Sales") > -1
+                        || group.name.indexOf("ActivityType") > -1 || group.name.indexOf("ActivityStatus") > -1) {
+                        const isActivities = (group.name.indexOf("ActivityType") > -1 || group.name.indexOf("ActivityStatus") > -1) ? true : false;
+                        (_a = group.options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                            if (option.isSelected) {
+                                this.updateSelectedParentModuleValues(group.name, option.count, isFirstIteration, filteredData, isActivities);
+                                isFirstIteration = false;
+                            }
+                        });
+                    }
+                });
+            }
+            static updateSelectedParentModuleValues(name, count, isFirstIteration, filteredData, isActivities) {
+                var _a;
+                (_a = filteredData
+                    .filter((data) => {
+                    return data.name == "Module" /* CustomConnector.FilterGroupName.RecordType */;
+                })[0]
+                    .options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                    if (name.indexOf(option.value) > -1 || (isActivities && option.value == "Activities")) {
+                        option.count = isFirstIteration ? count : option.count + count;
+                        option.isSelected = true;
+                    }
+                });
+            }
+            static updateChildModuleFilterData(childModules) {
+                let childGroups = [];
+                let allFiltersData = SampleNamespace.SampleData.sampleFilterData;
+                childModules === null || childModules === void 0 ? void 0 : childModules.forEach((module) => {
+                    childGroups = childGroups.concat(allFiltersData.filter((x) => {
+                        return x.name.indexOf(module) > -1;
+                    }));
+                });
+                return childGroups;
+            }
+        }
+        SampleNamespace.FilterHelper = FilterHelper;
+    })(SampleNamespace || (SampleNamespace = {}));
+    /*
+        This file is part of the Microsoft PowerApps code samples.
+        Copyright (C) Microsoft Corporation.  All rights reserved.
+        This source code is intended only as a supplement to Microsoft Development Tools and/or
+        on-line documentation.  See these other materials for detailed information regarding
+        Microsoft code samples.
+    
+        THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+        EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+        MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
+     */
+    var SampleNamespace;
+    (function (SampleNamespace) {
+        class SampleData {
+        }
+        SampleData.currentDate = new Date().toString();
+        SampleData.lastWeekDate = new Date().setDate(new Date().getDate() - 7).toString();
+        SampleData.nextWeekDate = new Date().setDate(new Date().getDate() + 7).toString();
+        SampleData.lastTwoWeekDate = new Date().setDate(new Date().getDate() - 14).toString();
+        SampleData.sampleRecordsData = [
+            {
+                id: "00001-notes1",
+                sortDateValue: SampleData.lastTwoWeekDate,
+                data: JSON.stringify({
+                    id: "00001",
+                    sortDateValue: SampleData.lastTwoWeekDate,
+                }),
+            },
+            {
+                id: "00002-notes2",
+                sortDateValue: SampleData.currentDate,
+                data: JSON.stringify({
+                    id: "00002",
+                    sortDateValue: SampleData.currentDate,
+                }),
+            },
+            {
+                id: "00003-activities-appointment4201-1-customstatus",
+                sortDateValue: SampleData.currentDate,
+                data: JSON.stringify({
+                    id: "00003",
+                    sortDateValue: SampleData.currentDate,
+                }),
+            },
+            {
+                id: "00004-activities-task4212-1-Overdue",
+                sortDateValue: SampleData.currentDate,
+                data: JSON.stringify({
+                    id: "00004",
+                    sortDateValue: SampleData.currentDate,
+                }),
+            },
+            {
+                id: "00005-activities-task4212-2-Overdue",
+                sortDateValue: SampleData.currentDate,
+                data: JSON.stringify({
+                    id: "00005",
+                    sortDateValue: SampleData.currentDate,
+                }),
+            },
+            {
+                id: "00006-ServiceCase1",
+                sortDateValue: SampleData.lastTwoWeekDate,
+                data: JSON.stringify({
+                    id: "00006",
+                    sortDateValue: SampleData.lastTwoWeekDate,
+                }),
+            },
+            {
+                id: "00007-ServiceAccount1",
+                sortDateValue: SampleData.lastWeekDate,
+                data: JSON.stringify({
+                    id: "00007",
+                    sortDateValue: SampleData.lastWeekDate,
+                }),
+            },
+            {
+                id: "00008-ServiceAccount2",
+                sortDateValue: SampleData.lastTwoWeekDate,
+                data: JSON.stringify({
+                    id: "00008",
+                    sortDateValue: SampleData.lastTwoWeekDate,
+                }),
+            },
+            {
+                id: "00009-SalesLeads1",
+                sortDateValue: SampleData.currentDate,
+                data: JSON.stringify({
+                    id: "00009",
+                    sortDateValue: SampleData.currentDate,
+                }),
+            },
+            {
+                id: "00010-SalesLeads2",
+                sortDateValue: SampleData.lastWeekDate,
+                data: JSON.stringify({
+                    id: "00010",
+                    sortDateValue: SampleData.lastWeekDate,
+                }),
+            },
+            {
+                id: "00011-SalesOpportunity1",
+                sortDateValue: SampleData.currentDate,
+                data: JSON.stringify({
+                    id: "00011",
+                    sortDateValue: SampleData.currentDate,
+                }),
+            },
+            {
+                id: "00012-SalesOpportunity2",
+                sortDateValue: SampleData.currentDate,
+                data: JSON.stringify({
+                    id: "00012",
+                    sortDateValue: SampleData.currentDate,
+                }),
+            },
+            {
+                id: "00013-SalesOpportunity3",
+                sortDateValue: SampleData.currentDate,
+                data: JSON.stringify({
+                    id: "00013",
+                    sortDateValue: SampleData.currentDate,
+                }),
+            },
+            {
+                id: "00014-SalesOpportunity4",
+                sortDateValue: SampleData.lastWeekDate,
+                data: JSON.stringify({
+                    id: "00014",
+                    sortDateValue: SampleData.lastWeekDate,
+                }),
+            },
+            {
+                id: "00015-SalesOpportunity5",
+                sortDateValue: SampleData.lastWeekDate,
+                data: JSON.stringify({
+                    id: "00015",
+                    sortDateValue: SampleData.lastWeekDate,
+                }),
+            },
+            {
+                id: "00016-SalesOpportunity6",
+                sortDateValue: SampleData.lastWeekDate,
+                data: JSON.stringify({
+                    id: "00016",
+                    sortDateValue: SampleData.lastWeekDate,
+                }),
+            },
+            {
+                id: "00017-SalesOpportunity7",
+                sortDateValue: SampleData.lastWeekDate,
+                data: JSON.stringify({
+                    id: "00017",
+                    sortDateValue: SampleData.lastWeekDate,
+                }),
+            },
+            {
+                id: "00012-SalesOpportunity8",
+                sortDateValue: SampleData.nextWeekDate,
+                data: JSON.stringify({
+                    id: "00012",
+                    sortDateValue: SampleData.nextWeekDate,
+                }),
+            },
+            {
+                id: "00018-SalesOpportunity9",
+                sortDateValue: SampleData.nextWeekDate,
+                data: JSON.stringify({
+                    id: "00018",
+                    sortDateValue: SampleData.nextWeekDate,
+                }),
+            }, {
+                id: "00019-SalesOpportunity10",
+                sortDateValue: SampleData.nextWeekDate,
+                data: JSON.stringify({
+                    id: "00019",
+                    sortDateValue: SampleData.nextWeekDate,
+                }),
+            },
+        ];
+        SampleData.sampleFilterData = [
+            {
+                // #1 - new filter type in existing filter group 'Record Type'
+                name: "Module" /* CustomConnector.FilterGroupName.RecordType */,
+                type: "MultiSelect" /* CustomConnector.FilterGroupType.MultiSelect */,
+                options: [
+                    {
+                        value: "Service",
+                        label: "Service",
+                        count: 3,
+                    },
+                    {
+                        value: "Sales",
+                        label: "Sales",
+                        count: 12,
+                    },
+                    {
+                        // #2 - edit filter option in an existing group
+                        value: "Notes" /* CustomConnector.RecordTypeGroupOption.Notes */,
+                        label: "CustomNotesLabel",
+                        count: 2,
+                    },
+                    {
+                        value: "Activities" /* CustomConnector.RecordTypeGroupOption.Activities */,
+                        count: 3,
+                    },
+                ],
+            },
+            {
+                name: "ActivityType" /* CustomConnector.FilterGroupName.ActivityType */,
+                type: "MultiSelect" /* CustomConnector.FilterGroupType.MultiSelect */,
+                options: [
+                    {
+                        value: "4201" /* CustomConnector.ActivityTypeGroupOption.Appointment */,
+                        label: "CustomApptLabel",
+                        count: 1,
+                    },
+                    {
+                        value: "4212" /* CustomConnector.ActivityTypeGroupOption.Task */,
+                        count: 2,
+                    },
+                ]
+            },
+            {
+                name: "ActivityStatus" /* CustomConnector.FilterGroupName.ActivityStatus */,
+                type: "MultiSelect" /* CustomConnector.FilterGroupType.MultiSelect */,
+                options: [
+                    {
+                        value: "Overdue" /* CustomConnector.ActivityStatusGroupOption.Overdue */,
+                        count: 2,
+                    },
+                    {
+                        value: "CustomStatus",
+                        label: "Custom Status",
+                        count: 1,
+                    },
+                ]
+            },
+            {
+                // #2 - new custom filter group
+                name: "Service",
+                label: "Service",
+                type: "MultiSelect" /* CustomConnector.FilterGroupType.MultiSelect */,
+                isExpanded: false,
+                options: [
+                    {
+                        value: "Case",
+                        label: "Case",
+                        count: 1,
+                    },
+                    {
+                        value: "Account",
+                        label: "Account",
+                        count: 2,
+                    },
+                ],
+            },
+            {
+                name: "Sales",
+                label: "Sales",
+                type: "MultiSelect" /* CustomConnector.FilterGroupType.MultiSelect */,
+                isExpanded: true,
+                options: [
+                    {
+                        value: "Lead",
+                        label: "Lead",
+                        count: 2,
+                    },
+                    {
+                        value: "Opportunity",
+                        label: "Opportunity",
+                        count: 10
+                    },
+                ],
+            },
+        ];
+        SampleNamespace.SampleData = SampleData;
+    })(SampleNamespace || (SampleNamespace = {}));
+    /*
+        This file is part of the Microsoft PowerApps code samples.
+        Copyright (C) Microsoft Corporation.  All rights reserved.
+        This source code is intended only as a supplement to Microsoft Development Tools and/or
+        on-line documentation.  See these other materials for detailed information regarding
+        Microsoft code samples.
+    
+        THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+        EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+        MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
+     */
+    

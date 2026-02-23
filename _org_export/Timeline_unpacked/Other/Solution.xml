@@ -1,0 +1,486 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.2.26022.140" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26022.140" OrganizationSchemaType="Full" CRMServerServiceabilityVersion="9.2.26023.00144">
+  <SolutionManifest>
+    <UniqueName>Timeline</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="Timeline" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions />
+    <Version>1.0.0.0</Version>
+    <Managed>0</Managed>
+    <Publisher>
+      <UniqueName>Crac3a9</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="CDS Default Publisher" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions />
+      <EMailAddress xsi:nil="true"></EMailAddress>
+      <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
+      <CustomizationPrefix>crbff</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>41445</CustomizationOptionValuePrefix>
+      <Addresses>
+        <Address>
+          <AddressNumber>1</AddressNumber>
+          <AddressTypeCode xsi:nil="true"></AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode xsi:nil="true"></ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+        <Address>
+          <AddressNumber>2</AddressNumber>
+          <AddressTypeCode xsi:nil="true"></AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode xsi:nil="true"></ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+      </Addresses>
+    </Publisher>
+    <RootComponents>
+      <RootComponent type="1" schemaName="crbff_shipments" behavior="0" />
+      <RootComponent type="1" schemaName="lead" behavior="1" />
+      <RootComponent type="183" id="{e8445a43-db81-451c-84d7-3e095f4fbbdd}" schemaName="VCP_DS_f881fdb6-c79d-4595-934a-0687c1c9ea5d" behavior="0" />
+      <RootComponent type="60" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}" />
+      <RootComponent type="61" schemaName="crbff_ShipmentTimelineConnector" behavior="0" />
+    </RootComponents>
+    <MissingDependencies>
+      <MissingDependency>
+        <Required type="1" schemaName="competitor" displayName="Competitor" solution="msdynce_Sales (9.0.4.0076)">
+          <package appName="msdynce_Sales" version="9.0.26023.10002">msdynce_SalesAnchor (9.0.26023.10002)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="1" schemaName="lead" displayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="1" schemaName="lead" displayName="Lead" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="181" schemaName="Virtual Connector Data Provider" displayName="Virtual Connector Data Provider" solution="msft_ConnectorProvider (9.1.0.458)" id="{b581d5dc-72e1-ea11-a81e-000d3af5fff1}">
+          <package appName="Virtual Connectors Data Provider Package" version="9.1.0.458">msft_ConnectorProviderAnchor (9.1.0.458)</package>
+        </Required>
+        <Dependent type="1" schemaName="crbff_shipments" displayName="shipments" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="181" schemaName="Virtual Connector Data Provider" displayName="Virtual Connector Data Provider" solution="msft_ConnectorProvider (9.1.0.458)" id="{b581d5dc-72e1-ea11-a81e-000d3af5fff1}">
+          <package appName="Virtual Connectors Data Provider Package" version="9.1.0.458">msft_ConnectorProviderAnchor (9.1.0.458)</package>
+        </Required>
+        <Dependent type="183" schemaName="VCP_DS_f881fdb6-c79d-4595-934a-0687c1c9ea5d" displayName="VCP_DS_f881fdb6-c79d-4595-934a-0687c1c9ea5d" id="{e8445a43-db81-451c-84d7-3e095f4fbbdd}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="address1_city" displayName="City" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="address1_composite" displayName="Address 1" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="address1_country" displayName="Country/Region" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="address1_line1" displayName="Street 1" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="address1_line2" displayName="Street 2" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="address1_line3" displayName="Street 3" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="address1_postalcode" displayName="ZIP/Postal Code" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="address1_stateorprovince" displayName="State/Province" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="businesscard" displayName="Business Card" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_SalesPatch201904 (9.0.1912.1007)">
+          <package appName="msdynce_Sales" version="9.0.26023.10002">msdynce_SalesAnchor (9.0.26023.10002)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="businesscardattributes" displayName="BusinessCardAttributes" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_SalesPatch201904 (9.0.1912.1007)">
+          <package appName="msdynce_Sales" version="9.0.26023.10002">msdynce_SalesAnchor (9.0.26023.10002)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="campaignid" displayName="Source Campaign" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_Marketing (9.0.4.37)">
+          <package appName="msdynce_Marketing" version="9.0.26023.10001">msdynce_MarketingAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="companyname" displayName="Company Name" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="createdon" displayName="Created On" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Leads Dashboard" parentDisplayName="Lead" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="description" displayName="Description" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="donotbulkemail" displayName="Do not allow Bulk Emails" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="donotemail" displayName="Do not allow Emails" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="donotphone" displayName="Do not allow Phone Calls" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="donotpostalmail" displayName="Do not allow Mails" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="donotsendmm" displayName="Marketing Material" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="emailaddress1" displayName="Email" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="followemail" displayName="Follow Email Activity" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="fullname" displayName="Name" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="industrycode" displayName="Industry" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="jobtitle" displayName="Job Title" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="lastusedincampaign" displayName="Last Campaign Date" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="leadqualitycode" displayName="Rating" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="leadsourcecode" displayName="Lead Source" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="mobilephone" displayName="Mobile Phone" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="numberofemployees" displayName="No. of Employees" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="ownerid" displayName="Owner" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="preferredcontactmethodcode" displayName="Preferred Method of Contact" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="revenue" displayName="Annual Revenue" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="sic" displayName="SIC Code" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="statuscode" displayName="Status Reason" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="subject" displayName="Topic" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="telephone1" displayName="Business Phone" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="transactioncurrencyid" displayName="Currency" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="2" schemaName="websiteurl" displayName="Website" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="26" schemaName="All Competitors (summary)" displayName="All Competitors (summary)" parentSchemaName="competitor" parentDisplayName="Competitor" solution="msdynce_Sales (9.0.4.0076)" id="{57bca9ac-87a0-4c28-adc8-2d0a4645f29e}">
+          <package appName="msdynce_Sales" version="9.0.26023.10002">msdynce_SalesAnchor (9.0.26023.10002)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="26" schemaName="All Leads" displayName="All Leads" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)" id="{5a926b99-3a5f-df11-ae90-00155d2e3002}">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Leads Dashboard" parentDisplayName="Lead" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="26" schemaName="Campaign Lookup View" displayName="Campaign Lookup View" parentSchemaName="campaign" parentDisplayName="Campaign" solution="msdynce_Marketing (9.0.4.37)" id="{0e76dc73-2052-484e-8c00-a760f8d522ec}">
+          <package appName="msdynce_Marketing" version="9.0.26023.10001">msdynce_MarketingAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="26" schemaName="Closed Leads" displayName="Closed Leads" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)" id="{00000000-0000-0000-00aa-000010001009}">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Leads Dashboard" parentDisplayName="Lead" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="26" schemaName="My Open Leads" displayName="My Open Leads" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)" id="{00000000-0000-0000-00aa-000010001005}">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Leads Dashboard" parentDisplayName="Lead" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="26" schemaName="Open Leads" displayName="Open Leads" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)" id="{00000000-0000-0000-00aa-000010001006}">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Leads Dashboard" parentDisplayName="Lead" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="59" schemaName="Leads by Owner (Tag Chart)" displayName="Leads by Owner (Tag Chart)" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)" id="{b92a5119-193a-e711-80e3-00155d42a416}">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Leads Dashboard" parentDisplayName="Lead" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="59" schemaName="Leads by Rating" displayName="Leads by Rating" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)" id="{f5976c58-5693-de11-97d4-00155da3b01e}">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Leads Dashboard" parentDisplayName="Lead" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="59" schemaName="Leads by Source (DOUGHNUT)" displayName="Leads by Source (DOUGHNUT)" parentSchemaName="lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)" id="{d311600c-163a-e711-80e3-00155d42a416}">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Leads Dashboard" parentDisplayName="Lead" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="60" displayName="Leads Dashboard" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Leads Dashboard" parentDisplayName="Lead" id="{9a14ebb4-143e-e711-80e1-00155d871bb4}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="60" displayName="Lead" parentDisplayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}">
+          <package appName="msdynce_LeadManagement" version="9.0.26023.10001">msdynce_LeadManagementAnchor (9.0.26023.10001)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="61" schemaName="msdyn_/Scripts/WhoKnowsWhomLoader.js" displayName="msdyn_/Scripts/WhoKnowsWhomLoader.js" solution="msdyn_connectiongraph (9.3.26022.10001)">
+          <package appName="msdynce_SalesInsights" version="9.0.26022.10002">msdynce_SalesInsightsAnchor (9.0.26022.10002)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="61" schemaName="msdyn_SalesOmniChannel/SalesPhoneNumber.Library.js" displayName="msdyn_SalesOmniChannel/SalesPhoneNumber.Library.js" solution="msdyn_SalesOmniChannel (9.1.26023.10002)">
+          <package appName="msdyn_AcceleratedSales" version="9.1.26023.10002">msdyn_AcceleratedSalesAnchor (9.1.26023.10002)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="61" schemaName="msdynmkt_Consent.CrmWebResources" displayName="msdynmkt_Consent.CrmWebResources" solution="DynamicsMKT_Consent (1.1.62310.37)">
+          <package appName="CxpSales" version="1.1.62310.44">DynamicsMKT_CxpSalesAnchorSolution (1.1.62310.44)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Consent.ContactabilityGridControl.ContactabilityGridControl" displayName="Consent.ContactabilityGridControl.ContactabilityGridControl" solution="DynamicsMKT_Consent (1.1.62310.37)">
+          <package appName="CxpSales" version="1.1.62310.44">DynamicsMKT_CxpSalesAnchorSolution (1.1.62310.44)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Intelligence.BusinessCardReaderControl.BusinessCardReader" displayName="Intelligence.BusinessCardReaderControl.BusinessCardReader" solution="BaseCustomControlsCore (9.0.2602.2010)">
+          <package appName="Base Custom Controls" version="9.0.2602.2010">BaseCustomControlsCore (9.0.2602.2010)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.AddressInputUCI" displayName="Microsoft.AddressInputUCI" solution="BaseCustomControlsCore (9.0.2602.2010)">
+          <package appName="Base Custom Controls" version="9.0.2602.2010">BaseCustomControlsCore (9.0.2602.2010)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="MscrmControls.AcceleratedSales.CadenceWidgetControl" displayName="MscrmControls.AcceleratedSales.CadenceWidgetControl" solution="msdyn_acceleratedsales (9.1.26023.10002)">
+          <package appName="msdyn_AcceleratedSales" version="9.1.26023.10002">msdyn_AcceleratedSalesAnchor (9.1.26023.10002)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="MscrmControls.CardFeedContainer.CardFeedContainer" displayName="MscrmControls.CardFeedContainer.CardFeedContainer" solution="BaseCustomControlsCore (9.0.2602.2010)">
+          <package appName="Base Custom Controls" version="9.0.2602.2010">BaseCustomControlsCore (9.0.2602.2010)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="MscrmControls.FlipSwitch.FlipSwitchControl" displayName="MscrmControls.FlipSwitch.FlipSwitchControl" solution="CustomControlsCore (9.2.26022.00140)">
+          <package appName="Custom Controls Package" version="9.2.26022.00140">CustomControlsCore (9.2.26022.00140)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="MscrmControls.Grid.ReadOnlyGrid" displayName="MscrmControls.Grid.ReadOnlyGrid" solution="BaseCustomControlsCore (9.0.2602.2010)">
+          <package appName="Base Custom Controls" version="9.0.2602.2010">BaseCustomControlsCore (9.0.2602.2010)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="MscrmControls.LeadHygiene.ValidatedFieldControl" displayName="MscrmControls.LeadHygiene.ValidatedFieldControl" solution="msdyn_leadhygiene (9.1.2511.2002)">
+          <package appName="msdyn_AcceleratedSales" version="9.1.26023.10002">msdyn_AcceleratedSalesAnchor (9.1.26023.10002)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="msdyn_SalesOmniChannel.SalesPhoneNumberControl" displayName="msdyn_SalesOmniChannel.SalesPhoneNumberControl" solution="msdyn_SalesOmniChannel (9.1.26023.10002)">
+          <package appName="msdyn_AcceleratedSales" version="9.1.26023.10002">msdyn_AcceleratedSalesAnchor (9.1.26023.10002)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="MsdynControls.WKWControls.ConnectionsWidget" displayName="MsdynControls.WKWControls.ConnectionsWidget" solution="msdyn_connectiongraph (9.3.26022.10001)">
+          <package appName="msdynce_SalesInsights" version="9.0.26022.10002">msdynce_SalesInsightsAnchor (9.0.26022.10002)</package>
+        </Required>
+        <Dependent type="60" displayName="Lead" parentDisplayName="Lead" id="{e3b6ddb7-8df0-4410-ac7b-fd32e5053d38}" />
+      </MissingDependency>
+    </MissingDependencies>
+  </SolutionManifest>
+</ImportExportXml>

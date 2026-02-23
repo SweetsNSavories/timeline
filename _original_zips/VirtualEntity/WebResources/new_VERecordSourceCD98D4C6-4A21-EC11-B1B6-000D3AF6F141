@@ -1,0 +1,462 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+/*
+    This file is part of the Microsoft PowerApps code samples.
+    Copyright (C) Microsoft Corporation.  All rights reserved.
+    This source code is intended only as a supplement to Microsoft Development Tools and/or
+    on-line documentation.  See these other materials for detailed information regarding
+    Microsoft code samples.
+
+    THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+    EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
+ */
+var SampleNamespace;
+(function (SampleNamespace) {
+    class VirtualEntitySecondaryRecordSource {
+        init(context) {
+            this.context = context;
+            this.svgIconSrcPath = Xrm.Utility.getGlobalContext().getWebResourceUrl("msdyn_cec_Available.svg");
+            return Promise.resolve();
+        }
+        getRecordSourceInfo() {
+            return { name: "VirtualEntitySecondaryRecordSource" };
+        }
+        getRecordsData(request, filter) {
+            var _a;
+            return __awaiter(this, void 0, void 0, function* () {
+                let recordsData;
+                if (!this.getRecordsDataPromise) {
+                    this.getRecordsDataPromise = this.fetchAllRecords();
+                }
+                recordsData = yield this.getRecordsDataPromise;
+                if (((_a = filter === null || filter === void 0 ? void 0 : filter.filterData) === null || _a === void 0 ? void 0 : _a.length) > 0) {
+                    recordsData = SampleNamespace.FilterHelper.getRecordsFromSecondaryFilterApplied(recordsData, filter.filterData);
+                }
+                this.orderRecordsData(recordsData, request.isAscending);
+                let recordsAfterLastItem = [];
+                if (request.lastItem) {
+                    recordsAfterLastItem = this.getRecordsAfterLastItem(recordsData, request.lastItem);
+                }
+                else {
+                    recordsAfterLastItem = recordsData;
+                }
+                let recordsDataCounted;
+                if (request.pageSize > recordsAfterLastItem.length) {
+                    recordsDataCounted = recordsAfterLastItem;
+                }
+                else {
+                    recordsDataCounted = recordsAfterLastItem.slice(0, request.pageSize);
+                }
+                const recordResponse = {
+                    requestId: request.requestId,
+                    records: recordsDataCounted,
+                };
+                return Promise.resolve(recordResponse);
+            });
+        }
+        fetchAllRecords() {
+            return __awaiter(this, void 0, void 0, function* () {
+                let recordsData = [];
+                let sampleRawRecords = yield this.context.webAPI.retrieveMultipleRecords("new_advertisement");
+                if ((sampleRawRecords === null || sampleRawRecords === void 0 ? void 0 : sampleRawRecords.entities.length) != 0) {
+                    recordsData = this.processRecordsData(sampleRawRecords.entities);
+                }
+                return recordsData;
+            });
+        }
+        processRecordsData(rawRecordsData) {
+            let recordsData = [];
+            rawRecordsData === null || rawRecordsData === void 0 ? void 0 : rawRecordsData.forEach(element => {
+                let recordData = {
+                    id: element.new_advertisementid,
+                    sortDateValue: element.new_airdate,
+                    data: JSON.stringify({
+                        id: element.new_advertisementid,
+                        name: element.new_name,
+                        airDate: element.new_airdate,
+                    })
+                };
+                recordsData.push(recordData);
+            });
+            return recordsData;
+        }
+        getFilterDetails(filter) {
+            return __awaiter(this, void 0, void 0, function* () {
+                let filtersData = SampleNamespace.SampleData.sampleFilterData;
+                // if (!this.getRecordsDataPromise) {
+                // 	this.getRecordsDataPromise = this.fetchAllRecords();
+                // }
+                // let recordsData = await this.getRecordsDataPromise;
+                if ((filter === null || filter === void 0 ? void 0 : filter.filterData) && filter.filterData.length > 0) {
+                    filtersData = SampleNamespace.FilterHelper.getFilterDetailsFilterApplied(filtersData, filter.filterData);
+                    //recordsData = FilterHelper.getRecordsFromSecondaryFilterApplied(recordsData, filter.filterData);
+                }
+                // add modifieddate group data to filterDetails
+                // let modifiedDateGroup = FilterHelper.getModifiedDateFilterDetails(recordsData);
+                // if (modifiedDateGroup.options && modifiedDateGroup.options.length > 0) {
+                // 	filtersData.push(modifiedDateGroup);
+                // }
+                return Promise.resolve(filtersData);
+            });
+        }
+        getRecordUX(recordData, recordState) {
+            const record = this.buildRecordUX(recordData, recordState.isExpanded);
+            return record;
+        }
+        getRecordsAfterLastItem(recordsData, lastItem) {
+            const lastItemIndex = recordsData.findIndex((item) => item.id == lastItem.id);
+            return recordsData.slice(lastItemIndex + 1);
+        }
+        buildRecordUX(recordData, isExpanded) {
+            const recordId = recordData.id;
+            const sortDateValue = recordData.sortDateValue;
+            const parsedRecordDetails = JSON.parse(recordData.data);
+            const commandComponents = this.createCommands();
+            const headerComponents = [this.createHeaderComponent(recordId, parsedRecordDetails.name)];
+            const bodyComponents = [this.createBodyComponent(recordId)];
+            const footerComponents = [this.createFooterComponent(recordId, parsedRecordDetails.airDate, isExpanded)];
+            const icon = this.createIcon();
+            // example of use custom icon component
+            const bubbleIcon = recordId.includes("D365") && this.createIconComponent(recordId);
+            const headerIcon = recordId.includes("D365") && this.createIconComponent(recordId);
+            const moduleName = this.getModuleName();
+            const timelineRecord = {
+                id: recordId,
+                commands: commandComponents,
+                moduleName: moduleName,
+                header: { components: headerComponents },
+                body: { components: bodyComponents },
+                footer: { components: footerComponents },
+                accessibleName: "SecondaryDataSource Record: " + recordId,
+                sortDateValue,
+                icon,
+                bubbleIcon,
+                headerIcon,
+            };
+            return timelineRecord;
+        }
+        createCommands() {
+            return [
+                {
+                    iconType: 203,
+                    label: "Command Label: Visit Microsoft Support",
+                    command: "VisitSMC",
+                    commandType: "HYPERLINK",
+                    href: "https://support.microsoft.com",
+                },
+            ];
+        }
+        createIcon() {
+            return {
+                type: 205,
+                accessibleName: "SecondaryDataSource icon accessibleName",
+            };
+        }
+        createIconComponent(recordId) {
+            const imgProps = {
+                id: recordId,
+                source: this.svgIconSrcPath,
+                style: {},
+            };
+            return this.context.factory.createElement("IMG", imgProps);
+        }
+        getModuleName() {
+            return "SecondaryDataSource";
+        }
+        createHeaderComponent(recordId, recordName) {
+            return this.context.factory.createElement("Label", {
+                key: "SecondaryDataSource_" + recordId + "_header",
+            }, "[Header] " + recordName);
+        }
+        createBodyComponent(recordId) {
+            return this.context.factory.createElement("Label", {
+                key: "SecondaryDataSource_" + recordId + "body",
+            }, "[Body] " + "AdvertisementID: " + recordId);
+        }
+        createFooterComponent(recordId, date, isExpanded) {
+            return this.context.factory.createElement("Label", {
+                key: "SecondaryDataSource_" + recordId + "footer",
+            }, "[Footer] " + "AirDate: " + date + "	RecordStatus: " + (isExpanded ? " Expanded" : " Collapsed"));
+        }
+        // non-robust orderRecordsData
+        orderRecordsData(recordsData, isAscending) {
+            if (isAscending) {
+                recordsData.sort((a, b) => {
+                    return a.sortDateValue && b.sortDateValue
+                        ? new Date(a.sortDateValue).getTime() - new Date(b.sortDateValue).getTime()
+                        : 0;
+                });
+            }
+            else {
+                recordsData.sort((a, b) => {
+                    return a.sortDateValue && b.sortDateValue
+                        ? new Date(b.sortDateValue).getTime() - new Date(a.sortDateValue).getTime()
+                        : 0;
+                });
+            }
+        }
+    }
+    SampleNamespace.VirtualEntitySecondaryRecordSource = VirtualEntitySecondaryRecordSource;
+})(SampleNamespace || (SampleNamespace = {}));
+/*
+    This file is part of the Microsoft PowerApps code samples.
+    Copyright (C) Microsoft Corporation.  All rights reserved.
+    This source code is intended only as a supplement to Microsoft Development Tools and/or
+    on-line documentation.  See these other materials for detailed information regarding
+    Microsoft code samples.
+
+    THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+    EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
+ */
+var SampleNamespace;
+(function (SampleNamespace) {
+    class FilterHelper {
+        static getFilterDetailsFilterApplied(allFiltersData, requestFilterData) {
+            let selectedFilterModules = [];
+            let filteredData = [];
+            let childModules = this.getChildModulesSelected(requestFilterData);
+            requestFilterData === null || requestFilterData === void 0 ? void 0 : requestFilterData.forEach((group) => {
+                var _a;
+                (_a = group.options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                    if (option.isSelected && !selectedFilterModules.some((x) => x === group.name)) {
+                        selectedFilterModules.push(group.name);
+                    }
+                });
+            });
+            selectedFilterModules === null || selectedFilterModules === void 0 ? void 0 : selectedFilterModules.forEach((element) => {
+                let matchedRecords = allFiltersData.filter((data) => {
+                    return data.name == element;
+                });
+                filteredData = filteredData.concat(matchedRecords);
+            });
+            // if parent module alone selected add child filter groups
+            if ((childModules === null || childModules === void 0 ? void 0 : childModules.length) > 0) {
+                filteredData = filteredData.concat(this.updateChildModuleFilterData(childModules));
+            }
+            else {
+                this.updateParentModuleFilterData(filteredData, selectedFilterModules, requestFilterData);
+            }
+            return filteredData;
+        }
+        static getRecordsFromSecondaryFilterApplied(recordsData, filterData) {
+            let filterKey = [];
+            if (this.isParentModuleSelected(filterData))
+                return recordsData;
+            filterData === null || filterData === void 0 ? void 0 : filterData.forEach((group) => {
+                var _a;
+                (_a = group.options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                    if (option.isSelected && group.name == "Advertisement") {
+                        filterKey.push(option.value);
+                    }
+                });
+            });
+            let filteredRecords = [];
+            filterKey === null || filterKey === void 0 ? void 0 : filterKey.forEach((element) => {
+                let matchedRecords;
+                matchedRecords = recordsData.filter((data) => {
+                    return data.id.toLowerCase().indexOf(element.toLowerCase()) > -1;
+                });
+                filteredRecords = filteredRecords.concat(matchedRecords);
+            });
+            return filteredRecords;
+        }
+        static isParentModuleSelected(requestFilterData) {
+            let isSelected = false;
+            requestFilterData === null || requestFilterData === void 0 ? void 0 : requestFilterData.forEach((group) => {
+                var _a;
+                (_a = group.options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                    if (option.isSelected && group.name == "Module") {
+                        isSelected = true;
+                    }
+                });
+            });
+            return isSelected;
+        }
+        static getChildModulesSelected(requestFilterData) {
+            let childModules = [];
+            requestFilterData === null || requestFilterData === void 0 ? void 0 : requestFilterData.forEach((group) => {
+                var _a;
+                (_a = group.options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                    if (option.isSelected) {
+                        if (group.name == "Module") {
+                            childModules.push(option.value);
+                        }
+                        if (group.name.indexOf("Advertisement") > -1) {
+                            childModules = childModules.filter((x) => x !== "Advertisement");
+                        }
+                    }
+                });
+            });
+            return childModules;
+        }
+        static getModifiedDateFilterDetails(recordsData) {
+            // Last7Days
+            const lastWeekDate = new Date();
+            lastWeekDate.setDate(lastWeekDate.getDate() - 7);
+            // Last30Days
+            const lastMonthDate = new Date();
+            lastMonthDate.setDate(lastMonthDate.getDate() - 30);
+            //Last24Hours
+            const lastDayDate = new Date();
+            lastDayDate.setDate(lastDayDate.getDate() - 1);
+            let last7daysCount = 0;
+            let last30daysCount = 0;
+            let last24HoursCount = 0;
+            recordsData.forEach((data) => {
+                let currentRecordDate = new Date(data.sortDateValue);
+                if (lastDayDate <= currentRecordDate) {
+                    last24HoursCount++;
+                    last7daysCount++;
+                    last30daysCount++;
+                }
+                else if (lastWeekDate <= currentRecordDate) {
+                    last7daysCount++;
+                    last30daysCount++;
+                }
+                else if (lastMonthDate <= currentRecordDate) {
+                    last30daysCount++;
+                }
+            });
+            let modifiedDateFilterData = {
+                name: "TLG" /* ModifiedDate */,
+                type: "MultiSelect" /* MultiSelect */,
+                options: [],
+            };
+            if (last24HoursCount > 0) {
+                modifiedDateFilterData.options.push({
+                    value: "Last24Hours" /* Last24Hours */,
+                    count: last24HoursCount,
+                });
+            }
+            if (last7daysCount > 0) {
+                modifiedDateFilterData.options.push({
+                    value: "Last7Days" /* Last7Days */,
+                    count: last7daysCount,
+                });
+            }
+            if (last30daysCount > 0) {
+                modifiedDateFilterData.options.push({
+                    value: "Last30Days" /* Last30Days */,
+                    count: last30daysCount,
+                });
+            }
+            return modifiedDateFilterData;
+        }
+        static updateParentModuleFilterData(filteredData, selectedFilterModules, requestFilterData) {
+            if (selectedFilterModules.indexOf("Module" /* RecordType */) == -1) {
+                filteredData.push(SampleNamespace.SampleData.sampleFilterData[0]);
+            }
+            // adjust module counts
+            requestFilterData === null || requestFilterData === void 0 ? void 0 : requestFilterData.forEach((group) => {
+                var _a;
+                let isFirstIteration = true;
+                if (group.name.indexOf("Advertisement") > -1) {
+                    (_a = group.options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                        if (option.isSelected) {
+                            this.updateSelectedParentModuleValues(group.name, option.count, isFirstIteration, filteredData);
+                            isFirstIteration = false;
+                        }
+                    });
+                }
+            });
+        }
+        static updateSelectedParentModuleValues(name, count, isFirstIteration, filteredData) {
+            var _a;
+            (_a = filteredData
+                .filter((data) => {
+                return data.name == "Module" /* RecordType */;
+            })[0]
+                .options) === null || _a === void 0 ? void 0 : _a.forEach((option) => {
+                if (name.indexOf(option.value) > -1) {
+                    option.count = isFirstIteration ? count : option.count + count;
+                    option.isSelected = true;
+                }
+            });
+        }
+        static updateChildModuleFilterData(childModules) {
+            let childGroups = [];
+            let allFiltersData = SampleNamespace.SampleData.sampleFilterData;
+            childModules === null || childModules === void 0 ? void 0 : childModules.forEach((module) => {
+                childGroups = childGroups.concat(allFiltersData.filter((x) => {
+                    return x.name.indexOf(module) > -1;
+                }));
+            });
+            return childGroups;
+        }
+    }
+    SampleNamespace.FilterHelper = FilterHelper;
+})(SampleNamespace || (SampleNamespace = {}));
+/*
+    This file is part of the Microsoft PowerApps code samples.
+    Copyright (C) Microsoft Corporation.  All rights reserved.
+    This source code is intended only as a supplement to Microsoft Development Tools and/or
+    on-line documentation.  See these other materials for detailed information regarding
+    Microsoft code samples.
+
+    THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+    EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
+ */
+var SampleNamespace;
+(function (SampleNamespace) {
+    class SampleData {
+    }
+    // public static currentDate = new Date().toString();
+    // public static lastWeekDate = new Date().setDate(new Date().getDate() - 7).toString();
+    // public static nextWeekDate = new Date().setDate(new Date().getDate() + 7).toString();
+    // public static lastTwoWeekDate = new Date().setDate(new Date().getDate() - 14).toString();
+    SampleData.sampleFilterData = [
+        {
+            // #1 - new filter type in existing filter group 'Record Type'
+            name: "Module" /* RecordType */,
+            type: "MultiSelect" /* MultiSelect */,
+            options: [
+                {
+                    value: "Advertisement",
+                    label: "Advertisement",
+                    count: 2,
+                },
+            ],
+        },
+        {
+            // #2 - new custom filter group
+            name: "Advertisement",
+            label: "Ad Item",
+            type: "MultiSelect" /* MultiSelect */,
+            isExpanded: true,
+            options: [
+                {
+                    value: "f89dee73-af9f-4cd4-b330-db93c25ff3c7",
+                    label: "Lemonade",
+                    count: 1,
+                },
+                {
+                    value: "db2d2186-1c29-4d1e-88ef-a127f521b9c6",
+                    label: "Coffee",
+                    count: 1,
+                },
+            ],
+        },
+    ];
+    SampleNamespace.SampleData = SampleData;
+})(SampleNamespace || (SampleNamespace = {}));
+/*
+    This file is part of the Microsoft PowerApps code samples.
+    Copyright (C) Microsoft Corporation.  All rights reserved.
+    This source code is intended only as a supplement to Microsoft Development Tools and/or
+    on-line documentation.  See these other materials for detailed information regarding
+    Microsoft code samples.
+
+    THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+    EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
+ */
