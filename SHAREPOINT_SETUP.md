@@ -133,23 +133,84 @@ You'll need these details to configure the virtual entity:
 
 ---
 
-## Step 6: Configure Timeline to Use Shipment Records
+## Step 6: Configure Timeline Control with Custom Connector
 
-Once the virtual entity is working, configure the Timeline control to display shipments:
+This step registers the Shipment custom record source with the Timeline control on your form.
 
-### In Model-Driven App Form
+### Prerequisites
+- Solution is imported (contains `crbff_ShipmentTimelineConnector` web resource)
+- Virtual entity is working and has records
 
-1. Open the **Lead** form (or your desired form)
-2. Add a **Timeline** control if not present
-3. In Timeline settings, add record source:
-   - **Record Source**: `SampleNamespace.ShipmentRecordSource`
-   - This is defined in `crbff_ShipmentTimelineConnector` web resource
-4. Save the form
+### Steps
 
-### Verify Timeline Shows Shipments
+1. **Open Form for Editing:**
+   - Go to Power Apps Maker → Apps → Select your model-driven app
+   - Edit the **Lead** form (or your desired form with Timeline)
+   - Click **Edit** to open form designer
+
+2. **Find Timeline Control:**
+   - In form designer, locate the **Timeline** control
+   - If not present, add it: **+ Component** → Search "Timeline"
+
+3. **Open Timeline Properties:**
+   - Select the Timeline control
+   - In the right panel, click **Edit record sources** (or **Properties**)
+
+4. **Add Custom Connector:**
+   - Click **+ New** or **Add record source**
+   - A dialog appears: **"Edit custom connector"**
+
+5. **Fill in Custom Connector Details:**
+
+   **Constructor:**
+   ```
+   SampleNamespace.ShipmentRecordSource
+   ```
+   - This is the class name defined in the web resource
+   - It must match exactly (case-sensitive)
+
+   **Resource path:**
+   ```
+   crbff_ShipmentTimelineConnector
+   ```
+   - This is the name of the web resource
+   - It must match the web resource name in your solution
+
+   **Configuration path:**
+   ```
+   (Leave empty)
+   ```
+   - Optional field for configuration objects
+   - Not needed for this implementation
+
+6. **Save:**
+   - Click **OK** to confirm
+   - Save the form changes
+   - Publish the form
+
+7. **Test:**
+   - Open a Lead record
+   - Timeline should now display shipment records
+   - Open F12 Developer Console and look for `[ShipmentRecordSource]` logs
+   - Test search bar and status filter dropdown
+
+### What You Should See
+
+| Component | Expected Behavior |
+|-----------|-------------------|
+| **Timeline Records** | Shipments appear with Title, Status, Recipient, Tracking |
+| **Search Bar** | Type keyword → filters records on Title/Status/Recipient/Tracking |
+| **Status Dropdown** | Select "Shipped" or "Delivered" → filters by status |
+| **Pagination** | Shows 10 records per page, scroll to see more |
+| **Console Logs** | `[ShipmentRecordSource] Cache hit - reusing 42 records` |
+
+---
+
+## Step 7: Verify Timeline Shows Shipments
 
 1. Open a Lead record
-2. In the Timeline, you should see:
+2. Scroll to Timeline section
+3. You should see:
    - All shipments in your list (first time = fetches from SharePoint)
    - Search bar working (filters against Title, Status, Recipient, Tracking)
    - Status filter dropdown (Shipped, Delivered, etc.)
