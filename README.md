@@ -189,6 +189,34 @@ getRecordUX(data) {
 }
 ```
 
+### Advanced: Filter by Related Record
+
+To show **only shipments associated with the current Lead** (or form record):
+
+1. Open `solution/WebResources/crbff_ShipmentTimelineConnector`
+2. Find the `_fetchAllRecords()` method
+3. Uncomment the optional relationship filter:
+
+```javascript
+// OPTIONAL: Fetch only records associated with current Lead
+// Uncomment and customize the field names to filter by relationship
+let currentRecordId = this._context.parameters?.tableContext?.id;
+if (currentRecordId) {
+  q += `&$filter=_parentcustomerid_value eq ${currentRecordId}`;  // Adjust field name as needed
+}
+```
+
+4. Replace `_parentcustomerid_value` with your actual lookup field name:
+   - Example: `_crbff_lead_value` (if shipments have a lookup to Lead)
+   - Example: `_regardingobjectid_value` (if using regarding field)
+
+5. Save and reload the form
+
+**This approach:**
+- Filters at the Web API level (more efficient)
+- Cache still works (one fetch per page load)
+- Shows only relevant records to the current Lead/Account/Contact
+
 ## 🔍 Debugging
 
 Enable console logging with F12 Developer Tools. Look for:
