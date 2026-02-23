@@ -60,6 +60,14 @@ SampleNamespace.ShipmentRecordSource = class {
   
   async _fetchAllRecords() {
     let q = `?$select=crbff_title,crbff_field1,crbff_field2,crbff_field3,crbff_field4,crbff_externalprimarykey`;
+    
+    // OPTIONAL: Fetch only records associated with current Lead
+    // Uncomment and customize the field names to filter by relationship
+    // let currentRecordId = this._context.parameters?.tableContext?.id;
+    // if (currentRecordId) {
+    //   q += `&$filter=_parentcustomerid_value eq ${currentRecordId}`;  // Adjust field name as needed
+    // }
+    
     let res = await this._context.webAPI.retrieveMultipleRecords("crbff_shipments", q);
     return (res.entities || []).map(i => ({ 
       id: i.crbff_shipmentsid, 
