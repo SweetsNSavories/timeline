@@ -27,6 +27,11 @@ Timeline/
 └── README.md                          # This file
 ```
 
+## 📚 Documentation
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Technical deep dive: How Timeline callbacks work, filtering patterns, caching strategy
+- **[SHAREPOINT_SETUP.md](SHAREPOINT_SETUP.md)** - Step-by-step guide to create SharePoint list and virtual entity to feed the Timeline connector
+
 ## 🎯 Key Components
 
 ### **ShipmentRecordSource Class** (`solution/WebResources/crbff_ShipmentTimelineConnector`)
@@ -135,25 +140,38 @@ Source: SharePoint list connected via Dataverse virtual entity
 
 ## 🚀 Deployment
 
+### Prerequisites
+
+**Before importing the solution**, you need a data source. This solution uses a SharePoint list connected via a Dataverse virtual entity.
+
+👉 **[Follow SHAREPOINT_SETUP.md](SHAREPOINT_SETUP.md)** to:
+- Create a SharePoint site and list
+- Create a virtual entity in Dataverse
+- Map columns correctly
+- Verify virtual entity has records
+
 ### Quick Start
 
-1. **Clone:**
+1. **Setup SharePoint & Virtual Entity:**
+   - Follow [SHAREPOINT_SETUP.md](SHAREPOINT_SETUP.md) (15 min)
+
+2. **Clone:**
    ```bash
    git clone https://github.com/SweetsNSavories/timeline.git
    ```
 
-2. **Import solution:**
+3. **Import solution:**
    - Go to Power Apps Maker Portal → Solutions
    - Import the `solution/` folder
    - Or use CLI: `pac solution import -p solution.zip`
 
-3. **Register on Timeline:**
+4. **Register on Timeline:**
    - Edit a Lead form (or your form with Timeline)
    - Configure Timeline control properties
    - Add `SampleNamespace.ShipmentRecordSource` as a record source
    - Save and reload
 
-4. **Test:**
+5. **Test:**
    - Open F12 Developer Console
    - Look for `[ShipmentRecordSource]` debug logs
    - Test search bar, dropdown filter, pagination
