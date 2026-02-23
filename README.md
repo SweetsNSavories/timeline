@@ -13,24 +13,14 @@ This solution shows how to create a custom Timeline record source that displays 
 - ✅ **Comprehensive logging** - Debug-friendly console output
 - ✅ **Production-ready** - Error handling, performance optimization, best practices
 
-## 🏗️ Solution Structure
-
-```
-Timeline/
-├── solution/                          # Unpacked Power Apps solution
-│   ├── Entities/                      # Entity definitions
-│   ├── EntityDataSources/             # Virtual entity data source configs
-│   ├── InteractionCentricDashboards/ # Timeline configuration
-│   ├── Other/                         # Miscellaneous components
-│   └── WebResources/                  # Web resources (JavaScript)
-│       └── crbff_ShipmentTimelineConnector  # Main custom record source (147 lines)
-└── README.md                          # This file
-```
+![Timeline Custom Connector Configuration](Timeline.png)
 
 ## 📚 Documentation
 
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - Technical deep dive: How Timeline callbacks work, filtering patterns, caching strategy
 - **[SHAREPOINT_SETUP.md](SHAREPOINT_SETUP.md)** - Step-by-step guide to create SharePoint list and virtual entity to feed the Timeline connector
+- **[Microsoft Learn: Timeline Control](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/set-up-timeline-control)** - Official Timeline control documentation
+- **[Custom Record Sources (Microsoft Docs)](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/customize-timeline-control)** - Custom entity record sources guide
 
 ## 🎯 Key Components
 
@@ -217,6 +207,42 @@ Enable console logging with F12 Developer Tools. Look for:
 2. `SampleNamespace.ShipmentRecordSource` registered in Timeline config
 3. You're on a form with Timeline control
 
+## 🎯 Use Cases
+
+- **Shipment Tracking** (this example) - Show related orders/shipments on Lead/Account
+- **Customer Communications** - Display email threads, calls, meetings alongside shipments
+- **Order History** - Timeline of order creation, fulfillment, delivery
+- **Support Cases** - Related tickets, interactions, attachments
+- **Custom Entities** - Any virtual entity can be a Timeline record source
+
+## 📣 Share on LinkedIn
+
+**Here's a post you can use:**
+
+```
+🚀 Just open-sourced our Timeline Custom Record Source!
+
+Built a production-ready Power Apps Timeline connector that displays shipments 
+from a SharePoint list via virtual entity. 
+
+✨ Features:
+• Client-side caching (one fetch, instant filtering)
+• Live search across multiple fields
+• Status dropdown filtering
+• Cursor-based pagination
+• Full debug logging
+
+147 lines of clean, extensible JavaScript that works with ANY virtual entity.
+
+GitHub: https://github.com/SweetsNSavories/timeline
+
+Complete setup guide + architecture documentation included!
+
+#PowerApps #Dataverse #TimelineControl #CustomDevelopment #SharePoint
+```
+
+---
+
 ## 📈 Performance
 
 | Operation | Time | Notes |
@@ -227,11 +253,14 @@ Enable console logging with F12 Developer Tools. Look for:
 | Pagination | <10ms | Array slice |
 | Max records | 1000+ | Before noticeable slowdown |
 
-## 📚 References
+## 📚 References & Resources
 
-- [Power Apps Timeline Control](https://docs.microsoft.com/power-apps/maker/model-driven-apps/set-up-timeline-control)
-- [Dataverse Web API](https://docs.microsoft.com/power-apps/developer/data-platform/webapi/overview)
-- [Virtual Entities](https://docs.microsoft.com/power-apps/developer/data-platform/virtual-entities/get-started-ve)
+**Official Microsoft Documentation:**
+- [Timeline Control (Power Apps Maker)](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/set-up-timeline-control)
+- [Customize Timeline Control](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/customize-timeline-control)
+- [Custom Record Sources for Timeline](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/set-up-timeline-control#custom-record-sources)
+- [Dataverse Web API Overview](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview)
+- [Virtual Entities in Dataverse](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/virtual-entities/get-started-ve)
 
 ## ✨ What Makes This Production-Ready
 
